@@ -9,6 +9,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema } from "@/types/schema";
 
 const Form = () => {
   const {
@@ -16,15 +18,17 @@ const Form = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     console.log(data);
     reset();
     setIsPasswordVisible(false);
   };
-
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const handlePasswordCheckbox = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -43,10 +47,8 @@ const Form = () => {
           id="outlined-basic name"
           label="Name"
           variant="outlined"
-          {...register("name", {
-            required: "Name is required",
-          })}
-          error={errors.name ? true : false}
+          {...register("name")}
+          error={!!errors.name}
           helperText={errors.name?.message}
         />
         <TextField
@@ -54,13 +56,7 @@ const Form = () => {
           id="outlined-basic email"
           label="Email"
           variant="outlined"
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: "Invalid email address",
-            },
-          })}
+          {...register("email")}
           error={!!errors.email}
           helperText={errors.email?.message}
         />
@@ -70,19 +66,7 @@ const Form = () => {
           label="Password"
           variant="outlined"
           type={isPasswordVisible ? "text" : "password"}
-          {...register("password", {
-            required: "Password is required",
-            pattern: {
-              value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$/,
-              message:
-                "Password must include an uppercase letter, lowercase letter, number, and special character",
-            },
-            minLength: {
-              value: 8,
-              message: "Password must be atleast 8 characters",
-            },
-          })}
+          {...register("password")}
           error={!!errors.password}
           helperText={errors.password?.message}
         />
