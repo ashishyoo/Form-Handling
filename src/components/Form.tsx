@@ -11,8 +11,11 @@ import {
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "@/types/schema";
+import { useRouter } from "next/navigation";
 
 const Form = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -28,6 +31,8 @@ const Form = () => {
     console.log(data);
     reset();
     setIsPasswordVisible(false);
+    localStorage.setItem("form", JSON.stringify(data));
+    router.push("/user");
   };
 
   const handlePasswordCheckbox = (

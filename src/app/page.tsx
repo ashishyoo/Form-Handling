@@ -8,7 +8,9 @@ const page = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Form />
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <Form />
+      </div>
     </ThemeProvider>
   );
 };
